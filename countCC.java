@@ -1,17 +1,21 @@
+package NSCs;
+
 import java.util.Stack;
 
 
 public class countCC {
 	
 	String[] keyword = {"[\\W]*if(.*).*",".*else if(.*).*",".*else[\\W]*",".*for(.*;.*;.*).*",".*do.*",".*while(.*).*",".*switch(.*).*",".*case.*"};	
+	String[] op = {".*>.*",".*<.*",".*==.*",".*!=.*",".*>=.*",".*<=.*"};
 	char[] operator = {'&','|'};
-	Stack<Character> stack = new Stack<Character>();//¦s©ñ±ø¥ó¦¡{
-	Stack<Character> fstack = new Stack<Character>();//¦s©ñ±ø¥ó¦¡(
+	Stack<Character> stack = new Stack<Character>();//å­˜æ”¾æ¢ä»¶å¼{
+	Stack<Character> fstack = new Stack<Character>();//å­˜æ”¾æ¢ä»¶å¼(
 	boolean iscondi = false;
 	boolean isIf = false;
+	boolean isR = false;
 	
 	int countCondition(int count,char[] c,String s){
-				if(count==-1){//ªì©l¤Æ¦¨­ûÅÜ¼Æ¼Æ­È
+				if(count==-1){//åˆå§‹åŒ–æˆå“¡è®Šæ•¸æ•¸å€¼
 					isIf = false;
 					iscondi = false;
 					return 0;
@@ -76,7 +80,7 @@ public class countCC {
 									fstack.push('(');
 									//System.out.println("( push");	
 								}
-								else if(c[i]==')'){
+								else if(c[i]==')' && fstack.size()>0){
 									fstack.pop();
 									//System.out.println(") pop");
 								}
@@ -182,6 +186,9 @@ public class countCC {
 						
 				}
 		}//End of for
+		if(s.matches("[\\W]*return.*")){
+			isR = true;
+		}
 				
 		if(fstack.size()>0 && iscondi==false){
 			System.out.println("into &&");
@@ -212,7 +219,22 @@ public class countCC {
 				}
 			}
 		}
-
+		if(isR==true){
+			if(count>0){
+				count++;
+			}
+			else{
+				L3:for(String opr:op){
+					if(s.matches(opr)){
+						count++;
+						break L3;
+					}
+				}
+			}
+			isR =false;
+		}
+		
+		
 		if(stack.size()==0 && isIf ==false && count==0){
 			System.out.println(-1);
 			return -1;
@@ -220,6 +242,6 @@ public class countCC {
 		//System.out.println("count:"+count+"---strData:"+s);
 		return count;
 	}//End of method
-
-
-}
+	
+	
+ }
