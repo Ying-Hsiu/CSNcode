@@ -21,12 +21,9 @@ public static void main(String[] args){
 	 try {
 		    ArrayList<String> methodName = new ArrayList<String>();//存放每方法之名稱
 		 	ArrayList<Integer> methodList = new ArrayList<Integer>();//存放每方法之最高循環複雜度
-		 	int ttempCount = 0;//暫存循環複雜度
-		 	int tempCount = 0;//暫存循環複雜度中較大者
-	    	int cCount = 0;//循環複雜度
-	    	Stack<Character> pStack = new Stack<Character>();
-	    	boolean isComment = false;//是否為註解
-	    	String tempStr="";
+	    	int cCount = 0;//計算循環複雜度
+	    	int uF = 0;//計算 {數目
+	    	int dF = 0;//計算 }數目
 	    	
 	    	String strData= inputFile.readLine();
 	    	char[] ch = strData.toCharArray();
@@ -45,90 +42,25 @@ public static void main(String[] args){
 		                	String name =  gmn.getName(ch);
 		                	methodName.add(name);                	
 		                	do{
-		                	   L1:for(int j=0;j<ch.length;j++){
-		                				if(ch[j]=='/'&& j<ch.length-1){
-		                					if(ch[j+1]=='/'){
-		                						strData = strData.substring(0, j);
-		                						break L1;
-		                					}
-		                					else if(ch[j+1]=='*'){
-		                						isComment = true;
-		                						//break L1;
-		                					}		                					
-		                				}
-		                				//註解尾巴部分
-		                				else if(ch[j]=='*' && ch[j+1]=='/' && isComment==true){
-		                					if(j<ch.length-2){
-		                						strData = strData.substring(j+2,ch.length-1);
-		                					}
-		                					isComment = false;
-		                				}
-		                				//排除字串
-		                				else if(ch[j]=='"'){
-		                					String space = "";
-		                					int i=j;
-			                				do{
-			                					j++;
-			                				}while(ch[j]!='"' && j<ch.length-1);
-		                					
-		                					tempStr = strData.substring(i, j+1);
-		                					//System.out.println("tempStr:"+tempStr);
-		                					for(int k=0;k<tempStr.length();k++){
-		                						space+=",";
-		                					}
-		                					//System.out.println("space  :"+space);
-		                					//System.out.println("StrDataBefore:"+strData);
-		                					strData = strData.replace(tempStr,space);
-		                					//System.out.println("StrDataAfter :"+strData);
-		                					
-		                				}
-		                				else if(ch[j]=='{')
-			 		            			pStack.push('{');
+		                	
+		                		for(int j=0;j<ch.length;j++){
+			 		            		if(ch[j]=='{')
+			 		            			uF++;
 			 		            		else if(ch[j]=='}')
-			 		            			pStack.pop();
-			 		            		
-		                		}
-		                			if(isComment==false){
-		                				System.out.println("line:"+line);
-		                				ttempCount = ccc.countCondition(0, ch, strData);
-		                				
-		                				
-		                				if(ttempCount==-1){//若讀取部分已是巢狀範圍外
-		                					if(tempCount>cCount){
-		                						cCount=tempCount;
-		                						tempCount=0;
-		                					}
-		                				}
-		                				else if(ttempCount==-2){//if前者為if
-		                					System.out.println("ifffffffffffffffffffffffffffffffffffff");
-		                					System.out.println("count:"+cCount);
-		                					if(tempCount>cCount){
-		                						cCount=tempCount;
-		                						tempCount=0;
-		                						
-		                					}
-		                					tempCount = ccc.countCondition(0, ch, strData);
-		                				}
-		                				else{
-		                					tempCount+=ttempCount;
-		                				}
-		                			}
-		                			
-		                			line++;
+			 		            			dF++;	
+			 		            	}
+		                			cCount += ccc.countCondition(0, ch, strData);
+			 		            	line++;
 			 		            	strData = inputFile.readLine();
 			 		            	ch = strData.toCharArray();
 			 		            	
-		 		            	}while(pStack.size()!=0);
-			                	if(tempCount>cCount){
-	        						cCount=tempCount;
-	        					}	 		            	
+			 		            	System.out.println("Line:"+line);
+		 		            	}while(uF!=dF || uF==0);
 		                	 	methodList.add(cCount);
-		                	 	System.out.println("---------addCount:"+cCount);
 		                	 	//初始化數值
-		                	 	ttempCount=0;
-		                	 	tempCount = 0;
-		                	 	cCount = 0;
-		                	 	ccc.countCondition(-1, ch, strData);
+		                	 	cCount=0;
+		                	 	uF=0;
+		                	 	dF=0;
 		                }
 		            }
 	    		        
@@ -137,9 +69,7 @@ public static void main(String[] args){
 			            if(strData!=null){
 			    			ch = strData.toCharArray();
 			            	}
-			            
 		    	}//End of while
-		    	
 		    		for(String str:methodName){
 		    			System.out.print(str+" ");
 		    		}
