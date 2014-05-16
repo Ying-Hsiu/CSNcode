@@ -1,4 +1,3 @@
-package NSCs;
 public class countObject {
 	String[] form = {".*void ", ".*static double ", ".*static int ", ".*static float ", ".*static long ",
             ".*static byte ", ".*static short ", ".*static char ", ".*static String ",

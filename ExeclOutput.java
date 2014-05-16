@@ -1,4 +1,3 @@
-package NSCs;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -35,26 +34,29 @@ public class ExeclOutput {
             HSSFRow row1 = sheet.createRow(0);
             HSSFRow row2 = sheet.createRow(1);
             
-            HSSFCell cell = row1.createCell(1);          
+            
+            HSSFCell cell = row1.createCell(0);
+            cell.setCellValue("類別名稱");
+            cell = row1.createCell(2);          
             cell.setCellValue("循環複雜度");
-            cell = row1.createCell(4);
+            cell = row1.createCell(5);
             cell.setCellValue("方法中呼叫的子方法");
-            cell = row1.createCell(7);
+            cell = row1.createCell(8);
             cell.setCellValue("方法中呼叫的物件");
             
-            cell = row2.createCell(0);
-            cell.setCellValue("方法名稱");
-            cell = row2.createCell(1);
-            cell.setCellValue("複雜度");    
             cell = row2.createCell(2);
-            cell.setCellValue("結果");          
+            cell.setCellValue("方法名稱");
+            cell = row2.createCell(3);
+            cell.setCellValue("複雜度");    
             cell = row2.createCell(4);
+            cell.setCellValue("結果");          
+            cell = row2.createCell(6);
             cell.setCellValue("個數");
-            cell = row2.createCell(5);
-            cell.setCellValue("結果");            
             cell = row2.createCell(7);
+            cell.setCellValue("結果");            
+            cell = row2.createCell(9);
             cell.setCellValue("個數");
-            cell = row2.createCell(8);
+            cell = row2.createCell(10);
             cell.setCellValue("結果");
                               
             try (FileOutputStream fOut = new FileOutputStream(docPath)) {
@@ -65,8 +67,31 @@ public class ExeclOutput {
             System.out.println(e);
         }
     }
+    
+    public void addClassName(String className){
+    	try {
+            fis = new FileInputStream(filePath);
+            fs = new POIFSFileSystem(fis);
+            wb = new HSSFWorkbook(fs);
+            
+            HSSFSheet sheet = wb.getSheetAt(0);
+            HSSFRow row = sheet.createRow(sheet.getLastRowNum() + 1);
+            
+            HSSFCell cell = row.createCell(0);
+            cell.setCellValue(className);
+            
+            
+            FileOutputStream fOut = new FileOutputStream(filePath);
+            wb.write(fOut);
+            fOut.flush();
+            // 操作結束，關閉檔
+            fOut.close();
 
-    public void addData(String method,int cc , String ccResult,Double double1,String mtResult,int oo,String ooResult) {
+        } catch (IOException ex) {
+        }
+    }
+
+    public void addData(String method,int cc , String ccResult,Double mt,String mtResult,int oo,String ooResult) {
         try {
             fis = new FileInputStream(filePath);
             fs = new POIFSFileSystem(fis);
@@ -75,21 +100,21 @@ public class ExeclOutput {
             HSSFSheet sheet = wb.getSheetAt(0);
             HSSFRow row = sheet.createRow(sheet.getLastRowNum() + 1);
             
-            HSSFCell cell = row.createCell(0);
+            HSSFCell cell = row.createCell(2);
             cell.setCellValue(method);
-            cell = row.createCell(1);
+            cell = row.createCell(3);
             cell.setCellValue(cc);
-            cell = row.createCell(2);
+            cell = row.createCell(4);
             cell.setCellValue(ccResult);
             
-            cell = row.createCell(4);
-            cell.setCellValue(double1);
-            cell = row.createCell(5);
+            cell = row.createCell(6);
+            cell.setCellValue(mt);
+            cell = row.createCell(7);
             cell.setCellValue(mtResult);
             
-            cell = row.createCell(7);
+            cell = row.createCell(9);
             cell.setCellValue(oo);
-            cell = row.createCell(8);
+            cell = row.createCell(10);
             cell.setCellValue(ooResult);
 
             FileOutputStream fOut = new FileOutputStream(filePath);

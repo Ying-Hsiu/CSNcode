@@ -1,4 +1,4 @@
-package NSCs;
+
 public class getMethodName {
 	
 	String getName(char[] ch){

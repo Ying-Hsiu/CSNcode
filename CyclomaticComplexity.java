@@ -1,11 +1,6 @@
-package NSCs;
-
 import java.io.*;
 import java.util.*;
-
 import javax.swing.JOptionPane;
-
-
 
 public class CyclomaticComplexity {
 
@@ -15,25 +10,34 @@ public class CyclomaticComplexity {
 	            ".*static boolean ", ".*static ", ".*double ", ".*int ", ".*float ", ".*long ",
 	            ".*byte ", ".*short ", ".*char ", ".*String ", ".*boolean ", ".*static "};
 		 LineNumberReader inputFile = null;
-		 String filePath = JOptionPane.showInputDialog("è«‹è¼¸å…¥æª”æ¡ˆè·¯å¾‘");
-		 String fileName = JOptionPane.showInputDialog("è«‹è¼¸å…¥æª”æ¡ˆåç¨±");
+		 String filePath = JOptionPane.showInputDialog("½Ğ¿é¤JÀÉ®×¸ô®|");
+		 listFile lf = new listFile();
+		 String[] allFiles = lf.listFile(filePath);
+		 String fileName;
+		 ExeclOutput opt = new ExeclOutput();
+ 		 opt.createFile("D:/output1.xls");
 		 
-		 try {//è®€å–æª”æ¡ˆ
+ 		 /*³v¤@¨ú±opackage¤U¤§.javaÀÉ*/
+		 for(int lfi=0;lfi<allFiles.length;lfi++){
+			 if(allFiles[lfi].matches(".*.java")){
+			 fileName=allFiles[lfi];
+		 
+		 try {//Åª¨úÀÉ®×
 		        inputFile = new LineNumberReader(new FileReader(filePath+"/"+fileName));
 		    } catch (FileNotFoundException ex) {
 		 }
 		 
 		 try {
-			    ArrayList<String> methodName = new ArrayList<String>();//å­˜æ”¾æ¯æ–¹æ³•ä¹‹åç¨±
-			 	ArrayList<Integer> methodList = new ArrayList<Integer>();//å­˜æ”¾æ¯æ–¹æ³•ä¹‹æœ€é«˜å¾ªç’°è¤‡é›œåº¦
-			 	ArrayList<Integer> methodObj = new ArrayList<Integer>();//å­˜æ”¾æ¯æ–¹æ³•å‘¼å«ä¹‹ç‰©ä»¶æ•¸
-			 	int ttempCount = 0;//æš«å­˜å¾ªç’°è¤‡é›œåº¦
-			 	int tempCount = 0;//æš«å­˜å¾ªç’°è¤‡é›œåº¦ä¸­è¼ƒå¤§è€…
-		    	int cCount = 0;//æœ€çµ‚å¾ªç’°è¤‡é›œåº¦
-		    	int cObject = 0;//è¨ˆç®—ç‰©ä»¶æ•¸ç›®
+			    ArrayList<String> methodName = new ArrayList<String>();//¦s©ñ¨C¤èªk¤§¦WºÙ
+			 	ArrayList<Integer> methodList = new ArrayList<Integer>();//¦s©ñ¨C¤èªk¤§³Ì°ª´`Àô½ÆÂø«×
+			 	ArrayList<Integer> methodObj = new ArrayList<Integer>();//¦s©ñ¨C¤èªk©I¥s¤§ª«¥ó¼Æ
+			 	int ttempCount = 0;//¼È¦s´`Àô½ÆÂø«×
+			 	int tempCount = 0;//¼È¦s´`Àô½ÆÂø«×¤¤¸û¤jªÌ
+		    	int cCount = 0;//³Ì²×´`Àô½ÆÂø«×
+		    	int cObject = 0;//­pºâª«¥ó¼Æ¥Ø
 		    	
 		    	Stack<Character> pStack = new Stack<Character>();
-		    	boolean isComment = false;//æ˜¯å¦ç‚ºè¨»è§£
+		    	boolean isComment = false;//¬O§_¬°µù¸Ñ
 		    	
 		    	String strData= inputFile.readLine();
 		    	char[] ch = strData.toCharArray();
@@ -45,18 +49,18 @@ public class CyclomaticComplexity {
 		    	Object[] rec;
 		    	
 		    	int fileLine = cFL.countLine(filePath+"/"+fileName);
-		    	CountSubMethodTest csop=new CountSubMethodTest(filePath+"/"+fileName); //å‘¼å«è¨ˆç®—å­æ–¹æ³•CLASS
-		    	csop.show_methodName();
-		    	ArrayList<Double>countSubMethodList=csop.countSubMethodList; //å­˜æ”¾å­æ–¹æ³•æ•¸
-		    	ArrayList<String>  methodNameSub= csop.methodList;	//å­˜æ”¾å­æ–¹æ³•ä¹‹åç¨±
-		    	ArrayList<String>  subHighLowList=csop.subhighlowList; //å­˜æ”¾å­æ–¹æ³•æ•¸é«˜ä½
-		    	System.out.println("fileLine: "+fileLine);
-		    		int line = 0;//ç”¨ä»¥è¨ˆç®—è¡Œæ•¸
+		    	CountSubMethodTest csop=new CountSubMethodTest(filePath+"/"+fileName); //©I¥s­pºâ¤l¤èªkCLASS
+                csop.show_methodName();
+                ArrayList<Double>countSubMethodList=csop.countSubMethodList; //¦s©ñ¤l¤èªk¼Æ
+                ArrayList<String>  methodNameSub= csop.methodList;    //¦s©ñ¤l¤èªk¤§¦WºÙ
+                ArrayList<String>  subHighLowList=csop.subhighlowList; //¦s©ñ¤l¤èªk¼Æ°ª§C
+		    	System.out.println("ClassName:"+fileName+",fileLine: "+fileLine);
+		    		int line = 0;//¥Î¥H­pºâ¦æ¼Æ
 		    		
 			    	while(line<fileLine) {
 			    		
-			    			//æ’é™¤è¨»è§£å­—ä¸²å­—å…ƒ
-			    			rec = (Object[]) exc.exclude(strData,ch);
+			    			//±Æ°£µù¸Ñ¦r¦ê¦r¤¸
+			    			rec = (Object[]) exc.exclude(strData,ch,isComment);
 			    			isComment=(boolean) rec[1];
 			    			strData=(String) rec[0]+"";
 			    			ch=strData.toCharArray();
@@ -82,13 +86,13 @@ public class CyclomaticComplexity {
 			                				ttempCount = ccc.countCondition(0, ch, strData);
 			                				
 			                				
-			                				if(ttempCount==-1){//è‹¥è®€å–éƒ¨åˆ†å·²æ˜¯å·¢ç‹€ç¯„åœå¤–
+			                				if(ttempCount==-1){//­YÅª¨ú³¡¤À¤w¬O±_ª¬½d³ò¥~
 			                					if(tempCount>cCount){
 			                						cCount=tempCount;
 			                						tempCount=0;
 			                					}
 			                				}
-			                				else if(ttempCount==-2){//ifå‰è€…ç‚ºif
+			                				else if(ttempCount==-2){//if«eªÌ¬°if
 			                					if(tempCount>cCount){
 			                						cCount=tempCount;
 			                						tempCount=0;
@@ -104,9 +108,9 @@ public class CyclomaticComplexity {
 			                			line++;
 				 		            	strData = inputFile.readLine()+"";
 				 		            	ch = strData.toCharArray();
-				 		            	
-				 		            	//æ’é™¤è¨»è§£å­—ä¸²å­—å…ƒ
-				 		            	rec = (Object[]) exc.exclude(strData,ch);
+				 		            
+				 		            	//±Æ°£µù¸Ñ¦r¦ê¦r¤¸
+				 		            	rec = (Object[]) exc.exclude(strData,ch,isComment);
 						    			isComment=(boolean) rec[1];
 						    			strData=(String) rec[0]+"";
 						    			ch=strData.toCharArray();
@@ -119,7 +123,7 @@ public class CyclomaticComplexity {
 			                	 	methodList.add(cCount);
 			                	 	methodObj.add(cObject);
 			                	 	System.out.println("---------addCount:"+cCount);
-			                	 	//åˆå§‹åŒ–æ•¸å€¼
+			                	 	//ªì©l¤Æ¼Æ­È
 			                	 	ttempCount=0;
 			                	 	tempCount = 0;
 			                	 	cCount = 0;
@@ -140,10 +144,10 @@ public class CyclomaticComplexity {
 			    		System.out.println("");
 			    		for(Integer num:methodList){
 			    			if(num<=10){
-			    				System.out.print(num+"(ä½) ");
+			    				System.out.print(num+"(§C) ");
 			    			}
 			    			else{
-			    				System.out.print(num+"(é«˜) ");
+			    				System.out.print(num+"(°ª) ");
 			    			}
 			    		}
 			    		System.out.println("");
@@ -153,16 +157,13 @@ public class CyclomaticComplexity {
 			    		System.out.println("method        object       type");
                         System.out.println("--------------------------------");
                         
-                        
-                        //æ’åº
+                        //±Æ§Ç
                         int a;
                         int cycCount;
                         double sub;
                         String mName;
-                       
                         int tmp;
                         int cTemp;
-                        
                         String temp;
                          for (int i = 0; i < methodObj.size()-1; i++) {
                             
@@ -172,31 +173,26 @@ public class CyclomaticComplexity {
                                  cycCount = methodList.get(i);
                                  
                                  
-                                 
                                  int b = methodObj.get(j);
                                  int cycCountTemp = methodList.get(j); 
                                  String mNameTemp = methodName.get(j);
-                                
                                  
                                   if (a < b) {
                                  
                                   tmp = b;
                                   cTemp = cycCountTemp;
                                   temp= mNameTemp;
-                                 
                                   methodObj.set(j, a);
                                   methodName.set(j, mName);
                                   methodList.set(j, cycCount);
-                                  
                                   methodObj.set(i, tmp);
                                   methodName.set(i,temp);
                                   methodList.set(i, cycCountTemp);
-                                  
                              }
                              }
                          
                          }
-                         //å°‡methodNameèˆ‡methodNameSubä¸­çš„æ–¹æ³•åç¨±åšæ¯”å°ä¸¦å°‡ç›¸åŒçš„äº’æ›
+                       //±NmethodName»PmethodNameSub¤¤ªº¤èªk¦WºÙ°µ¤ñ¹ï¨Ã±N¬Û¦Pªº¤¬´«
                          double value;
     	    			 String highlow;
     	    			 String name;
@@ -235,28 +231,20 @@ public class CyclomaticComplexity {
                         	 System.out.println(methodName.get(x)+":"+countSubMethodList.get(x)+" "+subHighLowList.get(x));
                          }
                          
-                         
-                         //è¼¸å‡ºè‡³Excel
-                        ExeclOutput opt = new ExeclOutput();
-                 		 opt.createFile("D:/output1.xls");
-                 		/* for(int i=0;i<methodName.size();i++){
-                 			 opt.addData(methodName.get(i), methodList.get(i),(methodList.get(i)>10)?"é«˜":"ä½", countSubMethodList.get(i),subHighLowList.get(i), methodObj.get(i),"é«˜");
-                 		 }*/
-                 		 
-                          //ç‰©ä»¶æ•¸ 80/20
-                      
+                          //ª«¥ó¼Æ 80/20
+                        opt.addClassName(fileName);
                         for(int i=0;i<methodName.size();i++){
                           
                           if(i<=methodName.size()*0.2-1){
                              
                               if(methodObj.get(i)==methodObj.get((methodName.size()-(int)(methodName.size()*0.8)))){
-                            	  opt.addData(methodName.get(i), methodList.get(i),(methodList.get(i)>10)?"é«˜":"ä½", countSubMethodList.get(i),subHighLowList.get(i), methodObj.get(i),"ä½");
+                            	  opt.addData(methodName.get(i), methodList.get(i),(methodList.get(i)>10)?"°ª":"§C", countSubMethodList.get(i),subHighLowList.get(i), methodObj.get(i),"§C");
                               }else{
-                            	  opt.addData(methodName.get(i), methodList.get(i),(methodList.get(i)>10)?"é«˜":"ä½", countSubMethodList.get(i),subHighLowList.get(i), methodObj.get(i),"é«˜");
+                            	  opt.addData(methodName.get(i), methodList.get(i),(methodList.get(i)>10)?"°ª":"§C", countSubMethodList.get(i),subHighLowList.get(i), methodObj.get(i),"°ª");
                               }
                              
                           }else {
-                        	  opt.addData(methodName.get(i), methodList.get(i),(methodList.get(i)>10)?"é«˜":"ä½", countSubMethodList.get(i),subHighLowList.get(i), methodObj.get(i),"ä½");
+                        	  opt.addData(methodName.get(i), methodList.get(i),(methodList.get(i)>10)?"°ª":"§C", countSubMethodList.get(i),subHighLowList.get(i), methodObj.get(i),"§C");
                                 }
                        
                             
@@ -264,6 +252,9 @@ public class CyclomaticComplexity {
 		    }catch(IOException IOe){
 		    	
 		    }
+		 
+		}
+	  }
 	 }
 	
 }
